@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: text-wrangler-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: text-wrangler
+  template:
+    metadata:
+      labels:
+        app: text-wrangler
+    spec:
+      containers:
+        - name: text-wrangler
+          image: ahmedavid/text-wrangler:latest
+          ports:
+            - containerPort: 8080
+
+---
+# postgres-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: text-wrangler-svc
+spec:
+  selector:
+    app: text-wrangler
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
